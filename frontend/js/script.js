@@ -98,7 +98,7 @@ contactForm.addEventListener('submit', async (e) => {
     
     try {
         // Send data to backend
-        const response = await fetch('http://localhost:5000/api/contact', {
+        const response = await fetch('https://guru-academy-xi.vercel.app/api/contact', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load teachers dynamically
     async function loadTeachers() {
         try {
-            const response = await fetch('http://localhost:5000/api/teachers');
+            const response = await fetch('https://guru-academy-xi.vercel.app/api/teachers');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load materials dynamically
     async function loadMaterials() {
         try {
-            const response = await fetch('http://localhost:5000/api/materials');
+            const response = await fetch('https://guru-academy-xi.vercel.app/api/materials');
             const materials = await response.json();
             const materialsGrid = document.querySelector('.materials-grid');
             materialsGrid.innerHTML = '';
@@ -441,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load toppers dynamically
     async function loadToppers() {
         try {
-            const response = await fetch('http://localhost:5000/api/toppers');
+            const response = await fetch('https://guru-academy-xi.vercel.app/api/toppers');
             const toppers = await response.json();
             
             const studentsGrid = document.querySelector('.students-grid');
@@ -518,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load Courses Section dynamically
     async function loadCourses() {
         try {
-            const response = await fetch('http://localhost:5000/api/courses');
+            const response = await fetch('https://guru-academy-xi.vercel.app/api/courses');
             const courses = await response.json();
             const coursesGrid = document.querySelector('.courses-grid');
             if (!coursesGrid) return;
