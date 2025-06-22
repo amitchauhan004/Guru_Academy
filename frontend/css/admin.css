@@ -1,0 +1,433 @@
+/* General Body and Font Styles */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    color: #444;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Login Page Styles */
+#loginSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+}
+
+.login-form {
+    width: 100%;
+    max-width: 400px;
+    padding: 3rem;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-logo {
+    height: 60px;
+    margin-bottom: 1.5rem;
+}
+
+#loginSection h2 {
+    color: #1a237e;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.error-msg {
+    color: #c0392b;
+    background-color: #fbeae5;
+    border: 1px solid #c0392b;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+#loginSection input {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+
+#loginSection input:focus {
+    border-color: #3949ab;
+    box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.1);
+    outline: none;
+}
+
+#loginSection button {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #1a237e, #3949ab);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#loginSection button:hover {
+    background: linear-gradient(135deg, #3949ab, #1a237e);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Admin Dashboard Layout */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.admin-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.admin-logo img {
+    height: 40px;
+}
+
+.admin-logo h1 {
+    font-size: 1.5rem;
+    color: #1a237e;
+    margin: 0;
+    font-weight: 600;
+}
+
+.logout-btn {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+.admin-main-content {
+    display: flex;
+}
+
+.admin-sidebar {
+    width: 250px;
+    background: #ffffff;
+    padding-top: 1.5rem;
+    border-right: 1px solid #e9ecef;
+    height: calc(100vh - 70px);
+    position: sticky;
+    top: 70px;
+}
+
+.admin-tab {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    color: #555;
+    font-weight: 500;
+    border-left: 4px solid transparent;
+    transition: all 0.3s;
+    font-size: 1rem;
+}
+
+.admin-tab:hover {
+    background: #f1f3f5;
+    color: #1a237e;
+}
+
+.admin-tab.active {
+    background: #e9ecef;
+    color: #1a237e;
+    border-left-color: #3949ab;
+    font-weight: 700;
+}
+
+.admin-tab i {
+    width: 20px;
+    text-align: center;
+}
+
+.admin-content {
+    flex-grow: 1;
+    padding: 2.5rem;
+}
+
+.admin-section {
+    display: none;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.admin-section.active {
+    display: block;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form and Data List Styles */
+.admin-section h2 {
+    color: #1a237e;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #3949ab;
+    padding-bottom: 0.8rem;
+    font-size: 1.8rem;
+}
+
+.admin-section h3 {
+    color: #3949ab;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.data-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.data-form input,
+.data-form select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+
+.data-form input:focus,
+.data-form select:focus {
+    border-color: #3949ab;
+    box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.1);
+    outline: none;
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1rem;
+}
+
+.form-actions button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    border: none;
+}
+
+.form-actions button[type="submit"] {
+    background-color: #27ae60;
+    color: #fff;
+}
+.form-actions button[type="submit"]:hover {
+    background-color: #229954;
+}
+
+.form-actions button[type="button"] {
+    background-color: #7f8c8d;
+    color: #fff;
+}
+.form-actions button[type="button"]:hover {
+    background-color: #616a6b;
+}
+
+.data-list {
+    margin-top: 2rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.data-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr 1.5fr;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.3s;
+}
+.data-row:last-child {
+    border-bottom: none;
+}
+.data-row:hover {
+    background-color: #f8f9fa;
+}
+
+.data-cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.teacher-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.teacher-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.teacher-info div {
+    display: flex;
+    flex-direction: column;
+}
+.teacher-info span {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.skills-cell, .features-cell {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.price-cell, .marks-cell {
+    font-weight: 700;
+    color: #1a237e;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.actions-cell button {
+    border: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.edit-btn { background-color: #3498db; color: white; }
+.edit-btn:hover { background-color: #2980b9; }
+
+.delete-btn { background-color: #e74c3c; color: white; }
+.delete-btn:hover { background-color: #c0392b; }
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .admin-main-content {
+        flex-direction: column;
+    }
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        display: flex;
+        overflow-x: auto;
+        padding-top: 0;
+        top: 65px;
+        border-right: none;
+        border-bottom: 1px solid #e9ecef;
+    }
+    .admin-tab {
+        border-left: none;
+        border-bottom: 4px solid transparent;
+        border-radius: 0;
+        justify-content: center;
+        flex: 1;
+    }
+    .admin-tab.active {
+        border-left-color: transparent;
+        border-bottom-color: #3949ab;
+    }
+    .admin-content {
+        padding: 1.5rem;
+    }
+    .data-row {
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 1rem;
+    }
+    .skills-cell, .features-cell {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-header {
+        padding: 1rem;
+    }
+    .admin-logo h1 {
+        font-size: 1.2rem;
+    }
+    .admin-logo img {
+        height: 35px;
+    }
+    .admin-tab span {
+        display: none;
+    }
+    .admin-tab i {
+        font-size: 1.2rem;
+    }
+    .data-row {
+        grid-template-columns: 1.5fr 1fr;
+        padding: 0.8rem;
+    }
+    .data-cell:not(:first-child):not(:last-child) {
+        display: none;
+    }
+    .teacher-info b {
+        font-size: 0.9rem;
+    }
+    .login-form {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .actions-cell {
+        flex-direction: column;
+    }
+    .actions-cell button {
+        width: 100%;
+    }
+    .form-actions {
+        flex-direction: column;
+    }
+    .form-actions button {
+        width: 100%;
+    }
+} 

@@ -1,0 +1,35 @@
+# Node modules
+backend/node_modules/
+frontend/node_modules/
+
+# Environment files
+backend/.env
+frontend/.env
+
+# Editor folders
+.vscode/
+.cursor/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Local database files
+*.db
+
+# Log files
+*.log
+
+# OS generated files
+*.swp
+
+# Home directory and user-specific folders (safety)
+../../.anaconda/
+../../.ipython/
+../../.jupyter/
+../../.cache/
+../../.vscode/
+../../.cursor/
+../../node_modules/
+../../*.log 

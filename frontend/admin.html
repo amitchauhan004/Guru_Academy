@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guru Academy Admin Panel</title>
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="shortcut icon" href="/frontend/assets/images/Logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background: #f4f6fb; margin: 0; font-family: 'Segoe UI', sans-serif; }
+    .admin-container { max-width: 1100px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 2rem; }
+    .admin-tabs { display: flex; gap: 1.5rem; margin-bottom: 2rem; }
+    .admin-tab { cursor: pointer; padding: 0.7rem 1.5rem; border-radius: 8px 8px 0 0; background: #e3e7f1; color: #1a237e; font-weight: 600; }
+    .admin-tab.active { background: #1a237e; color: #fff; }
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+    .logout-btn { float: right; background: #e53935; color: #fff; border: none; border-radius: 5px; padding: 0.5rem 1rem; cursor: pointer; }
+    .login-form { max-width: 350px; margin: 4rem auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); padding: 2rem; }
+    .login-form input { width: 100%; margin-bottom: 1rem; padding: 0.7rem; border-radius: 5px; border: 1px solid #ccc; }
+    .login-form button { width: 100%; background: #1a237e; color: #fff; border: none; border-radius: 5px; padding: 0.7rem; font-weight: 600; cursor: pointer; }
+    .error-msg { color: #e53935; margin-bottom: 1rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <div id="loginSection">
+    <div class="login-form">
+      <img src="assets/images/Logo.png" alt="Logo" class="login-logo">
+      <h2>Admin Login</h2>
+      <div id="loginError" class="error-msg" style="display:none;"></div>
+      <input type="text" id="loginUsername" placeholder="Username" autocomplete="username">
+      <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+      <button id="loginBtn">Login</button>
+    </div>
+  </div>
+
+  <div id="adminDashboard" style="display:none;">
+    <div class="admin-header">
+      <div class="admin-logo">
+        <img src="assets/images/Logo.png" alt="Guru Academy Logo">
+        <h1>Admin Panel</h1>
+      </div>
+      <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+    <div class="admin-main-content">
+      <div class="admin-sidebar">
+        <div class="admin-tab active" data-tab="teachers"><i class="fas fa-chalkboard-teacher"></i><span>Teachers</span></div>
+        <div class="admin-tab" data-tab="courses"><i class="fas fa-book"></i><span>Courses</span></div>
+        <div class="admin-tab" data-tab="toppers"><i class="fas fa-trophy"></i><span>Toppers</span></div>
+        <div class="admin-tab" data-tab="materials"><i class="fas fa-book-open"></i><span>Materials</span></div>
+      </div>
+      <div class="admin-content">
+        <div class="admin-section active" id="section-teachers">
+          <h2>Manage Teachers</h2>
+          <div id="teachersList" class="data-list"></div>
+          <h3>Add / Edit Teacher</h3>
+          <form id="teacherForm" class="data-form">
+            <input type="hidden" id="teacherId">
+            <input type="text" id="teacherName" placeholder="Name" required>
+            <input type="text" id="teacherSubject" placeholder="Subject">
+            <input type="text" id="teacherExperience" placeholder="Experience">
+            <input type="text" id="teacherSkills" placeholder="Skills (comma separated)">
+            <input type="text" id="teacherPhoto" placeholder="Photo URL">
+            <div class="form-actions">
+              <button type="submit">Save Teacher</button>
+              <button type="button" id="cancelTeacherEdit" style="display:none;">Cancel</button>
+            </div>
+          </form>
+        </div>
+        <div class="admin-section" id="section-courses">
+          <h2>Manage Courses</h2>
+          <div id="coursesList" class="data-list"></div>
+          <h3>Add / Edit Course</h3>
+          <form id="courseForm" class="data-form">
+            <input type="hidden" id="courseId">
+            <input type="text" id="courseTitle" placeholder="Title" required>
+            <input type="text" id="courseDescription" placeholder="Description">
+            <input type="text" id="courseCategory" placeholder="Category">
+            <input type="text" id="courseFeatures" placeholder="Features (comma separated)">
+            <input type="number" id="coursePrice" placeholder="Price">
+            <input type="number" id="courseOriginalPrice" placeholder="Original Price">
+            <div class="form-actions">
+              <button type="submit">Save Course</button>
+              <button type="button" id="cancelCourseEdit" style="display:none;">Cancel</button>
+            </div>
+          </form>
+        </div>
+        <div class="admin-section" id="section-toppers">
+          <h2>Manage Toppers</h2>
+          <div id="toppersList" class="data-list"></div>
+          <h3>Add / Edit Topper</h3>
+          <form id="topperForm" class="data-form">
+            <input type="hidden" id="topperId">
+            <input type="text" id="topperName" placeholder="Name" required>
+            <input type="text" id="topperRollNo" placeholder="Roll No">
+            <input type="number" id="topperMarks" placeholder="Marks">
+            <input type="text" id="topperPhoto" placeholder="Photo URL">
+            <select id="topperSubject">
+              <option value="science">Science</option>
+              <option value="maths">Maths</option>
+            </select>
+            <div class="form-actions">
+              <button type="submit">Save Topper</button>
+              <button type="button" id="cancelTopperEdit" style="display:none;">Cancel</button>
+            </div>
+          </form>
+        </div>
+        <div class="admin-section" id="section-materials">
+          <h2>Manage Study Materials</h2>
+          <div id="materialsList" class="data-list"></div>
+          <h3>Add / Edit Material</h3>
+          <form id="materialForm" class="data-form">
+            <input type="hidden" id="materialId">
+            <input type="text" id="materialTitle" placeholder="Title" required>
+            <input type="text" id="materialDescription" placeholder="Description">
+            <input type="text" id="materialFeatures" placeholder="Features (comma separated)">
+            <input type="number" id="materialPrice" placeholder="Price">
+            <input type="text" id="materialIcon" placeholder="Icon (FontAwesome class)">
+            <div class="form-actions">
+              <button type="submit">Save Material</button>
+              <button type="button" id="cancelMaterialEdit" style="display:none;">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="admin.js"></script>
+</body>
+</html> 
