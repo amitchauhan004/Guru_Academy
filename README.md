@@ -141,9 +141,9 @@ node server.js
 
 ## 📞 Contact Information
 
-- **Phone**: +91 8890889747, +91 7891889747
-- **Email**: info@guruacademy.com, admissions@guruacademy.com
-- **Address**: 123 Education Street, Knowledge Park, New Delhi, India 110001
+- **Phone**: +91 7891889747
+- **Email**: guruacademy1998@gmail.com
+- **Address**:Bandikui, Rajasthan 
 
 ## 🔧 Customization
 
