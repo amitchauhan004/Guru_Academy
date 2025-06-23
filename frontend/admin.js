@@ -5,7 +5,7 @@ const loginBtn = document.getElementById('loginBtn');
 const logoutBtn = document.getElementById('logoutBtn');
 const loginError = document.getElementById('loginError');
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://guru-academy-xi.vercel.app/api'; // Production backend URL
 let authToken = sessionStorage.getItem('adminToken') || '';
 
 function showLogin() {

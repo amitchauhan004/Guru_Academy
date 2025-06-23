@@ -22,8 +22,10 @@ const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/guru_acad
 mongoose.connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-}).then(() => console.log('MongoDB connected successfully'))
-  .catch(err => console.error('MongoDB connection error:', err));
+}).then(() => {
+    console.log('MongoDB connected successfully');
+    createDefaultAdmin(); // Create default admin user
+}).catch(err => console.error('MongoDB connection error:', err));
 
 // --- Models ---
 const teacherSchema = new mongoose.Schema({
@@ -122,6 +124,26 @@ app.post('/api/login', async (req, res) => {
     res.json({ token });
 });
 
+// Function to create a default admin user
+async function createDefaultAdmin() {
+    try {
+        const adminUsername = 'admin';
+        const existingAdmin = await User.findOne({ username: adminUsername });
+        if (!existingAdmin) {
+            const hashedPassword = await bcrypt.hash('admin', 10); // Default password is 'admin'
+            const adminUser = new User({
+                username: adminUsername,
+                password: hashedPassword
+            });
+            await adminUser.save();
+            console.log('Default admin user created successfully.');
+        } else {
+            console.log('Admin user already exists.');
+        }
+    } catch (error) {
+        console.error('Error creating default admin user:', error);
+    }
+}
 
 // --- Contact Form Endpoint ---
 app.post('/api/contact', async (req, res) => {
