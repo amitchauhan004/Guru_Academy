@@ -7,7 +7,7 @@
 <h2 align="center">Excellence in 10th Class Science Education by L.K. Sir</h2>
 
 <p align="center">
-  A comprehensive online coaching platform for 10th-grade students, providing quality science education and expert guidance for CBSE board exams.
+  A comprehensive online coaching platform for 10th-grade students, providing quality science education and expert guidance for RBSE board exams.
 </p>
 
 ---
