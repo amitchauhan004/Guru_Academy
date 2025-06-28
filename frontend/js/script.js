@@ -1,3 +1,79 @@
+// Animation System
+class AnimationManager {
+    constructor() {
+        this.animatedElements = [];
+        this.init();
+    }
+
+    init() {
+        this.setupScrollAnimations();
+        this.setupTypingAnimation();
+        this.setupIntersectionObserver();
+    }
+
+    setupScrollAnimations() {
+        // Add animation classes to elements
+        const elementsToAnimate = document.querySelectorAll('.animate-on-scroll, .animate-fade-in-left, .animate-fade-in-right, .animate-scale-in');
+        elementsToAnimate.forEach(el => {
+            this.animatedElements.push(el);
+        });
+    }
+
+    setupTypingAnimation() {
+        const typingElement = document.querySelector('.typing-animation');
+        if (!typingElement) return;
+
+        // Reset typing animation on page load
+        setTimeout(() => {
+            typingElement.style.animation = 'none';
+            typingElement.offsetHeight; // Trigger reflow
+            typingElement.style.animation = 'typing 3s steps(40, end), blink 0.75s step-end infinite';
+        }, 100);
+    }
+
+    setupIntersectionObserver() {
+        const options = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    
+                    // Add staggered animation for achievement counters
+                    if (entry.target.classList.contains('achievement')) {
+                        this.animateCounter(entry.target.querySelector('h4'), parseInt(entry.target.querySelector('h4').textContent));
+                    }
+                }
+            });
+        }, options);
+
+        this.animatedElements.forEach(el => {
+            observer.observe(el);
+        });
+    }
+
+    animateCounter(element, target) {
+        if (!element) return;
+        
+        let current = 0;
+        const increment = target / 50;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(current) + (element.textContent.includes('+') ? '+' : '');
+        }, 30);
+    }
+}
+
+// Initialize Animation Manager
+const animationManager = new AnimationManager();
+
 // Mobile Menu Toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
@@ -6,6 +82,19 @@ hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
 });
+
+// Mobile Dropdown Toggle
+const navDropdown = document.querySelector('.nav-dropdown');
+if (navDropdown) {
+    const dropdownLink = navDropdown.querySelector('.nav-link');
+    
+    dropdownLink.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+            e.preventDefault();
+            navDropdown.classList.toggle('active');
+        }
+    });
+}
 
 // Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-link').forEach(link => {
@@ -60,7 +149,15 @@ function updateActiveNavLink() {
 window.addEventListener('scroll', updateActiveNavLink);
 
 // Call once on page load to set initial active state
-document.addEventListener('DOMContentLoaded', updateActiveNavLink);
+document.addEventListener('DOMContentLoaded', () => {
+    updateActiveNavLink();
+    
+    // Add loading animation to dynamic content
+    addLoadingStates();
+    
+    // Initialize particle system
+    initParticleSystem();
+});
 
 // Smooth Scrolling for Navigation Links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -75,6 +172,40 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// Loading States for Dynamic Content
+function addLoadingStates() {
+    const loadingSkeleton = `
+        <div class="loading-skeleton" style="height: 200px; border-radius: 10px; margin: 10px 0;"></div>
+    `;
+    
+    // Add loading states to dynamic sections
+    const teachersGrid = document.querySelector('.teachers-grid');
+    const coursesGrid = document.querySelector('.courses-grid');
+    const materialsGrid = document.querySelector('.materials-grid');
+    const studentsGrid = document.querySelector('.students-grid');
+    
+    if (teachersGrid) teachersGrid.innerHTML = loadingSkeleton;
+    if (coursesGrid) coursesGrid.innerHTML = loadingSkeleton;
+    if (materialsGrid) materialsGrid.innerHTML = loadingSkeleton;
+    if (studentsGrid) studentsGrid.innerHTML = loadingSkeleton;
+}
+
+// Particle System
+function initParticleSystem() {
+    const particleBackground = document.querySelector('.particle-background');
+    if (!particleBackground) return;
+
+    // Create additional particles dynamically
+    for (let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        particleBackground.appendChild(particle);
+    }
+}
 
 // Contact Form Handling
 const contactForm = document.getElementById('contactForm');
@@ -111,6 +242,9 @@ contactForm.addEventListener('submit', async (e) => {
         if (result.success) {
             showNotification(result.message, 'success');
             contactForm.reset();
+            // Add success animation
+            contactForm.classList.add('form-success');
+            setTimeout(() => contactForm.classList.remove('form-success'), 1000);
         } else {
             showNotification(result.message || 'Something went wrong. Please try again.', 'error');
         }
@@ -124,7 +258,7 @@ contactForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Notification System
+// Enhanced Notification System with Animation
 function showNotification(message, type = 'info') {
     // Remove existing notifications
     const existingNotification = document.querySelector('.notification');
@@ -142,7 +276,7 @@ function showNotification(message, type = 'info') {
         </div>
     `;
     
-    // Add styles
+    // Add styles with enhanced animation
     notification.style.cssText = `
         position: fixed;
         top: 20px;
@@ -154,15 +288,16 @@ function showNotification(message, type = 'info') {
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         z-index: 10000;
         max-width: 400px;
-        animation: slideIn 0.3s ease;
+        animation: slideIn 0.3s ease, bounceIn 0.6s ease-out 0.3s both;
+        transform-origin: top right;
     `;
     
-    // Add animation styles
+    // Add enhanced animation styles
     const style = document.createElement('style');
     style.textContent = `
         @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from { transform: translateX(100%) scale(0.8); opacity: 0; }
+            to { transform: translateX(0) scale(1); opacity: 1; }
         }
         .notification-content {
             display: flex;
@@ -182,9 +317,11 @@ function showNotification(message, type = 'info') {
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
         }
         .notification-close:hover {
             opacity: 0.8;
+            transform: scale(1.1);
         }
     `;
     document.head.appendChild(style);
@@ -195,13 +332,15 @@ function showNotification(message, type = 'info') {
     // Close button functionality
     const closeBtn = notification.querySelector('.notification-close');
     closeBtn.addEventListener('click', () => {
-        notification.remove();
+        notification.style.animation = 'slideIn 0.3s ease reverse';
+        setTimeout(() => notification.remove(), 300);
     });
     
     // Auto remove after 5 seconds
     setTimeout(() => {
         if (notification.parentNode) {
-            notification.remove();
+            notification.style.animation = 'slideIn 0.3s ease reverse';
+            setTimeout(() => notification.remove(), 300);
         }
     }, 5000);
 }
@@ -363,9 +502,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Clear existing teachers before adding new ones
             teachersGrid.innerHTML = ''; 
             
-            teachers.forEach(teacher => {
+            teachers.forEach((teacher, index) => {
                 const teacherCard = document.createElement('div');
-                teacherCard.className = 'teacher-card';
+                teacherCard.className = 'teacher-card animate-scale-in';
+                teacherCard.style.animationDelay = `${index * 0.1}s`;
                 
                 let photoHtml = '';
                 if (teacher.photo) {
@@ -386,6 +526,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
                 teachersGrid.appendChild(teacherCard);
+                
+                // Add to animation manager
+                animationManager.animatedElements.push(teacherCard);
             });
         } catch (error) {
             console.error("Failed to load teachers:", error);
@@ -405,9 +548,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const materials = await response.json();
             const materialsGrid = document.querySelector('.materials-grid');
             materialsGrid.innerHTML = '';
-            materials.forEach(material => {
+            
+            materials.forEach((material, index) => {
                 const materialCard = document.createElement('div');
-                materialCard.className = 'material-card';
+                materialCard.className = 'material-card animate-scale-in';
+                materialCard.style.animationDelay = `${index * 0.1}s`;
+
                 materialCard.innerHTML = `
                     <div class="material-icon">
                         <i class="${material.icon || 'fas fa-book'}"></i>
@@ -415,26 +561,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>${material.title}</h3>
                     <p>${material.description}</p>
                     <ul class="material-features">
-                        ${(material.features || []).map(feature => `<li>${feature}</li>`).join('')}
+                        ${material.features.map(feature => `<li>${feature}</li>`).join('')}
                     </ul>
                     <div class="material-price">
                         <span class="price">₹${material.price}</span>
                     </div>
-                    <button class="btn btn-primary material-btn" data-course="${material.title}" data-price="${material.price}">Get Access</button>
+                    <button class="material-btn">Get Access</button>
                 `;
                 materialsGrid.appendChild(materialCard);
-
-                // Add click event to Get Access button
-                const getAccessBtn = materialCard.querySelector('.material-btn');
-                if (getAccessBtn) {
-                    getAccessBtn.addEventListener('click', function() {
-                        // Redirect to Google Play Store app link
-                        window.open('https://play.google.com/store/apps/details?id=com.tdkolz.wmpxun', '_blank');
-                    });
-                }
+                
+                // Add to animation manager
+                animationManager.animatedElements.push(materialCard);
             });
         } catch (error) {
             console.error("Failed to load materials:", error);
+            const materialsGrid = document.querySelector('.materials-grid');
+            materialsGrid.innerHTML = '<p>Could not load course materials. Please try again later.</p>';
         }
     }
 
@@ -443,162 +585,129 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch('https://guru-academy-xi.vercel.app/api/toppers');
             const toppers = await response.json();
-            
             const studentsGrid = document.querySelector('.students-grid');
-            const scienceToppersTable = document.querySelector('#science-toppers-table .toppers-table-body');
-            const mathsToppersTable = document.querySelector('#maths-toppers-table .toppers-table-body');
-
             studentsGrid.innerHTML = '';
-            scienceToppersTable.innerHTML = '';
-            mathsToppersTable.innerHTML = '';
-
-            toppers.sort((a, b) => (b.marks || 0) - (a.marks || 0));
-
-            toppers.forEach(topper => {
-                // Populate student photo gallery
+            
+            toppers.forEach((topper, index) => {
                 const studentCard = document.createElement('div');
-                studentCard.className = 'student-card';
-                studentCard.setAttribute('data-name', topper.name);
-                studentCard.setAttribute('data-roll', topper.rollNo || 'N/A');
-                studentCard.setAttribute('data-marks', topper.marks || 'N/A');
+                studentCard.className = 'student-card animate-scale-in';
+                studentCard.style.animationDelay = `${index * 0.1}s`;
+
                 studentCard.innerHTML = `
                     <div class="student-photo-container">
-                        <img src="${topper.photo || 'assets/images/Logo.png'}" alt="${topper.name}" class="student-photo-img">
+                        <img src="${topper.photo}" alt="${topper.name}" class="student-photo-img">
+                        <div class="achievement-star">
+                            <i class="fas fa-star"></i>
+                        </div>
                     </div>
                     <div class="student-info">
                         <h4>${topper.name}</h4>
-                        <p class="student-roll">Roll No: ${topper.rollNo || 'N/A'}</p>
-                        <div class="student-marks marks-${topper.marks}">${topper.marks || 'N/A'}/100</div>
+                        <p class="student-roll">Roll No: ${topper.rollNo}</p>
+                        <p class="student-marks marks-${Math.floor(topper.marks)}">${topper.marks}/100</p>
                     </div>
                 `;
-                studentsGrid.appendChild(studentCard);
-
-                // Add click event for popup
-                studentCard.addEventListener('click', function() {
-                    const name = this.getAttribute('data-name');
-                    const roll = this.getAttribute('data-roll');
-                    const marks = this.getAttribute('data-marks');
-                    showStudentDetails(name, roll, marks);
+                
+                studentCard.addEventListener('click', () => {
+                    showStudentDetails(topper.name, topper.rollNo, topper.marks);
                 });
-
-                // Populate subject-wise tables
-                if (topper.subject === 'science') {
-                    const row = document.createElement('div');
-                    row.className = 'toppers-table-row';
-                    row.innerHTML = `
-                        <span>${topper.name}</span>
-                        <span>${topper.rollNo || 'N/A'}</span>
-                        <span class="${topper.marks >= 100 ? 'badge-top' : ''}">${topper.marks}</span>
-                    `;
-                    scienceToppersTable.appendChild(row);
-                } else if (topper.subject === 'maths') {
-                    const row = document.createElement('div');
-                    row.className = 'toppers-table-row';
-                    row.innerHTML = `
-                        <span>${topper.name}</span>
-                        <span class="${topper.marks >= 96 ? 'badge-top' : ''}">${topper.marks}</span>
-                    `;
-                    mathsToppersTable.appendChild(row);
-                }
+                
+                studentsGrid.appendChild(studentCard);
+                
+                // Add to animation manager
+                animationManager.animatedElements.push(studentCard);
             });
-
-            // Call pagination after rows are injected
-            paginateTable('science-toppers-table', 'science-pagination', 7);
-            paginateTable('maths-toppers-table', 'maths-pagination', 7);
-
         } catch (error) {
             console.error("Failed to load toppers:", error);
+            const studentsGrid = document.querySelector('.students-grid');
+            studentsGrid.innerHTML = '<p>Could not load student information. Please try again later.</p>';
+        }
+    }
+
+    // Function to load courses dynamically
+    async function loadCourses() {
+        try {
+            const response = await fetch('https://guru-academy-xi.vercel.app/api/courses');
+            const courses = await response.json();
+            const coursesGrid = document.querySelector('.courses-grid');
+            coursesGrid.innerHTML = '';
+            
+            courses.forEach((course, index) => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'course-card animate-scale-in';
+                courseCard.style.animationDelay = `${index * 0.1}s`;
+
+                courseCard.innerHTML = `
+                    <h3>${course.title}</h3>
+                    <p>${course.description}</p>
+                    <ul class="course-features">
+                        ${course.features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                    <div class="course-price">
+                        <span class="course-original-price">₹${course.originalPrice}</span>
+                        <span class="price">₹${course.price}</span>
+                    </div>
+                    <button class="course-enroll-btn">Enroll Now</button>
+                `;
+                coursesGrid.appendChild(courseCard);
+                
+                // Add to animation manager
+                animationManager.animatedElements.push(courseCard);
+            });
+        } catch (error) {
+            console.error("Failed to load courses:", error);
+            const coursesGrid = document.querySelector('.courses-grid');
+            coursesGrid.innerHTML = '<p>Could not load courses. Please try again later.</p>';
+        }
+    }
+
+    // Function to load courses into navbar dropdown
+    async function loadDropdownCourses() {
+        try {
+            const response = await fetch('https://guru-academy-xi.vercel.app/api/courses');
+            const courses = await response.json();
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+            
+            if (dropdownMenu) {
+                dropdownMenu.innerHTML = '';
+                
+                // Add Course Materials as the first item
+                const materialsItem = document.createElement('li');
+                materialsItem.innerHTML = `
+                    <a href="#course-materials" data-section="course-materials">
+                        <i class="fas fa-book-open"></i>
+                        Course Materials
+                    </a>
+                `;
+                dropdownMenu.appendChild(materialsItem);
+                
+                // Add separator
+                const separator = document.createElement('li');
+                separator.innerHTML = '<hr style="margin: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.2);">';
+                dropdownMenu.appendChild(separator);
+                
+                // Add courses
+                courses.forEach(course => {
+                    const courseItem = document.createElement('li');
+                    courseItem.innerHTML = `
+                        <a href="#courses" data-section="courses">
+                            <i class="fas fa-graduation-cap"></i>
+                            ${course.title}
+                        </a>
+                    `;
+                    dropdownMenu.appendChild(courseItem);
+                });
+            }
+        } catch (error) {
+            console.error("Failed to load dropdown courses:", error);
         }
     }
 
     // Load dynamic data
     loadMaterials();
     loadToppers();
-
-    // Load Courses Section dynamically
-    async function loadCourses() {
-        try {
-            const response = await fetch('https://guru-academy-xi.vercel.app/api/courses');
-            const courses = await response.json();
-            const coursesGrid = document.querySelector('.courses-grid');
-            if (!coursesGrid) return;
-            coursesGrid.innerHTML = '';
-            if (courses.length === 0) {
-                coursesGrid.innerHTML = `<div style=\"text-align:center; color:#1a237e; font-size:1.2rem; padding:2rem 0; width:100%; font-weight:600;\">The Courses Will Be Updated Soon......</div>`;
-                return;
-            }
-            courses.forEach(course => {
-                const courseCard = document.createElement('div');
-                courseCard.className = 'material-card';
-                courseCard.innerHTML = `
-                    <div class="material-icon">
-                        <i class="${course.icon || 'fas fa-book'}"></i>
-                    </div>
-                    <h3>${course.title}</h3>
-                    <p>${course.description || ''}</p>
-                    <ul class="material-features">
-                        ${(course.features || []).map(f => `<li>${f}</li>`).join('')}
-                    </ul>
-                    <div class="material-price">
-                        <span class="price">₹${course.price}</span>
-                        ${course.originalPrice ? `<span class='course-original-price'>₹${course.originalPrice}</span>` : ''}
-                    </div>
-                    <button class="btn btn-primary course-enroll-btn">Enroll</button>
-                `;
-                coursesGrid.appendChild(courseCard);
-
-                // Add click event to Enroll button
-                const enrollBtn = courseCard.querySelector('.course-enroll-btn');
-                if (enrollBtn) {
-                    enrollBtn.addEventListener('click', function() {
-                        window.open('https://play.google.com/store/apps/details?id=com.tdkolz.wmpxun', '_blank');
-                    });
-                }
-            });
-        } catch (error) {
-            console.error('Failed to load courses:', error);
-        }
-    }
-
-    // Load courses when the page is ready
     loadCourses();
+    loadDropdownCourses();
 });
-
-// Counter Animation for Achievements
-function animateCounter(element, target, duration = 2000) {
-    let start = 0;
-    const increment = target / (duration / 16);
-    
-    const timer = setInterval(() => {
-        start += increment;
-        if (start >= target) {
-            element.textContent = target + (element.textContent.includes('+') ? '+' : '');
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(start) + (element.textContent.includes('+') ? '+' : '');
-        }
-    }, 16);
-}
-
-// Animate counters when achievements section is visible
-const achievementsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const counters = entry.target.querySelectorAll('h4');
-            counters.forEach(counter => {
-                const target = parseInt(counter.textContent);
-                animateCounter(counter, target);
-            });
-            achievementsObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.5 });
-
-// Observe achievements section
-const achievementsSection = document.querySelector('.achievements');
-if (achievementsSection) {
-    achievementsObserver.observe(achievementsSection);
-}
 
 // Loading Animation
 window.addEventListener('load', () => {
