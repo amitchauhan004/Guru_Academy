@@ -558,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="material-icon">
                         <i class="${material.icon || 'fas fa-book'}"></i>
                     </div>
-                    <h3>${material.name}</h3>
+                    <h3>${material.title}</h3>
                     <p>${material.description}</p>
                     <ul class="material-features">
                         ${material.features.map(feature => `<li>${feature}</li>`).join('')}
@@ -637,7 +637,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 courseCard.style.animationDelay = `${index * 0.1}s`;
 
                 courseCard.innerHTML = `
-                    <h3>${course.name}</h3>
+                    <h3>${course.title}</h3>
                     <p>${course.description}</p>
                     <ul class="course-features">
                         ${course.features.map(feature => `<li>${feature}</li>`).join('')}
@@ -687,50 +687,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Add courses
                 courses.forEach(course => {
-                    const dropdownItem = document.createElement('li');
-                    dropdownItem.innerHTML = `
-                        <a href="#courses" data-course="${course.name}">
-                            <i class="fas fa-book"></i>
-                            ${course.name}
+                    const courseItem = document.createElement('li');
+                    courseItem.innerHTML = `
+                        <a href="#courses" data-section="courses">
+                            <i class="fas fa-graduation-cap"></i>
+                            ${course.title}
                         </a>
                     `;
-                    dropdownMenu.appendChild(dropdownItem);
-                    
-                    // Add click event to scroll to courses section
-                    dropdownItem.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const coursesSection = document.querySelector('#courses');
-                        if (coursesSection) {
-                            coursesSection.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                    });
-                });
-                
-                // Add click event for Course Materials
-                materialsItem.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const materialsSection = document.querySelector('#course-materials');
-                    if (materialsSection) {
-                        materialsSection.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
+                    dropdownMenu.appendChild(courseItem);
                 });
             }
         } catch (error) {
             console.error("Failed to load dropdown courses:", error);
-            const dropdownMenu = document.querySelector('.dropdown-menu');
-            if (dropdownMenu) {
-                dropdownMenu.innerHTML = `
-                    <li><a href="#course-materials"><i class="fas fa-book-open"></i> Course Materials</a></li>
-                    <li><hr style="margin: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.2);"></li>
-                    <li><a href="#courses"><i class="fas fa-exclamation-triangle"></i> Could not load courses</a></li>
-                `;
-            }
         }
     }
 
