@@ -24,6 +24,16 @@ const materialSchema = new mongoose.Schema({
 });
 const Material = mongoose.model('Material', materialSchema);
 
+const courseSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    description: String,
+    category: String,
+    features: [String],
+    price: Number,
+    originalPrice: Number
+});
+const Course = mongoose.model('Course', courseSchema);
+
 const topperSchema = new mongoose.Schema({
     name: { type: String, required: true },
     rollNo: String,
@@ -48,6 +58,25 @@ const teachersData = [
         experience: '5+ years specializing in advance Mathematics.', 
         skills: ['M.Sc.', 'B.Ed'], 
         photo: 'assets/images/Hemraj_Sir.jpg' 
+    }
+];
+
+const coursesData = [
+    {
+        title: 'Class 10 Science Complete Course',
+        description: 'Comprehensive Science course covering all topics for Class 10 board exams.',
+        category: 'Science',
+        features: ['Complete syllabus coverage', 'Practice questions', 'Mock tests', '24/7 doubt support'],
+        price: 2999,
+        originalPrice: 3999
+    },
+    {
+        title: 'Class 10 Mathematics Mastery',
+        description: 'Master Mathematics with our comprehensive course designed for Class 10 students.',
+        category: 'Mathematics',
+        features: ['Step-by-step solutions', 'Important formulas', 'Previous year questions', 'Live doubt sessions'],
+        price: 2499,
+        originalPrice: 3499
     }
 ];
 
@@ -105,12 +134,14 @@ async function seedDatabase() {
         // Clear existing data
         await Teacher.deleteMany({});
         await Material.deleteMany({});
+        await Course.deleteMany({});
         await Topper.deleteMany({});
         console.log('Cleared existing data.');
 
         // Insert new data
         await Teacher.insertMany(teachersData);
         await Material.insertMany(materialsData);
+        await Course.insertMany(coursesData);
         await Topper.insertMany(toppersData);
         console.log('Database seeded successfully!');
 
